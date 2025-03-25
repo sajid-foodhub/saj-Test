@@ -1,6 +1,6 @@
 {
   "name": "react-native-saj-test",
-  "version": "0.1.0",
+  "version": "2.2.8",
   "description": "tets",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -38,12 +38,14 @@
   ],
   "scripts": {
     "example": "yarn workspace react-native-saj-test-example",
+    "prebuild": "node scripts/postScript.js",
     "test": "jest",
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "clean": "del-cli lib",
-    "prepare": "bob build",
-    "release": "release-it"
+    "prepare": "bob build && npm run prebuild",
+    "release": "release-it",
+    "prepublishOnly": "npm run prebuild"
   },
   "keywords": [
     "react-native",
@@ -67,6 +69,7 @@
     "@commitlint/config-conventional": "^19.6.0",
     "@evilmartians/lefthook": "^1.5.0",
     "@react-native/eslint-config": "^0.73.1",
+    "@react-navigation/native": "^7.0.18",
     "@release-it/conventional-changelog": "^9.0.2",
     "@types/jest": "^29.5.5",
     "@types/react": "^18.2.44",
