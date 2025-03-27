@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback, type ReactNode } from 'react';
 import {
   Text,
   Pressable,
@@ -11,7 +11,7 @@ import { useSliceTheme } from '../contextProvider/context';
 import { useTheme } from '@react-navigation/native';
 import { getBackgroundColor, getBorderColor, getTextColor } from './helper';
 import { useDeviceBreakpoint } from '../responsive/useDeviceBreakPoint';
-import { resolveVariant } from '../responsive/helper';
+import { resolveVariant, scaleFont } from '../responsive/helper';
 import type { SizeType } from './Type';
 import type { BUTTON_COLOR_TOKENS } from './Token';
 
@@ -26,6 +26,10 @@ interface ButtonProps {
   rounded?: boolean;
   buttonStyle?: ViewStyle;
   textStyle?: TextStyle;
+  showPrefixIcon?: boolean;
+  showSuffixIcon?: boolean;
+  prefixIcon?: React.ReactNode;
+  suffixIcon?: React.ReactNode;
 }
 
 export const BUTTON_VARIANTS = {
@@ -47,6 +51,10 @@ const Button: React.FC<ButtonProps> = ({
   size = 'medium',
   disabled = false,
   rounded = false,
+  showPrefixIcon = false,
+  showSuffixIcon = false,
+  prefixIcon,
+  suffixIcon,
   buttonStyle,
   textStyle,
 }) => {
@@ -106,6 +114,22 @@ const Button: React.FC<ButtonProps> = ({
 
   const opacity = useMemo(() => (disabled ? 0.3 : 1), [disabled]);
 
+  const iconStyleMemo = useMemo(
+    () => ({
+      size: scaleFont(theme.buttonIconStyles[responsiveSize as SizeType].size),
+      color: textColor,
+    }),
+    [responsiveSize, textColor]
+  );
+
+  const applyIconStyle = useCallback(
+    (icon: ReactNode) =>
+      icon
+        ? React.cloneElement(icon as React.ReactElement, iconStyleMemo)
+        : null,
+    [iconStyleMemo]
+  );
+
   const styles = useMemo(
     () =>
       StyleSheet.create({
@@ -123,9 +147,10 @@ const Button: React.FC<ButtonProps> = ({
         combinedTextStyle: {
           ...stylesLocal.baseText,
           ...textTheme,
+          fontSize: scaleFont(Number(textTheme.fontSize)),
           color: textColor,
           ...textStyle,
-        },
+        } as TextStyle,
       }),
     [
       buttonTheme,
@@ -153,7 +178,9 @@ const Button: React.FC<ButtonProps> = ({
         onMouseLeave: () => setIsHovered(false),
       })}
     >
+      {showPrefixIcon && prefixIcon && applyIconStyle(prefixIcon)}
       <Text style={styles.combinedTextStyle}>{children}</Text>
+      {showSuffixIcon && suffixIcon && applyIconStyle(suffixIcon)}
     </Pressable>
   );
 };
