@@ -73,43 +73,37 @@ const Button: React.FC<ButtonProps> = ({
       theme.buttonStyles[responsiveSize as SizeType][
         rounded ? 'solidRounded' : 'solid'
       ],
-    [responsiveSize, rounded]
+    [responsiveSize, rounded, theme.buttonStyles]
   );
 
   const textTheme = useMemo(
     () => theme.buttonTextStyles[responsiveSize as SizeType],
-    [responsiveSize]
+    [responsiveSize, theme.buttonTextStyles]
   );
 
-  const backgroundColor = useMemo(
-    () =>
-      getBackgroundColor(
-        variant as keyof typeof BUTTON_COLOR_TOKENS,
-        isHovered ? 'hover' : 'default',
-        colorTheme
-      ),
-    [variant, isHovered]
+  const defaultBgColor = useMemo(
+    () => getBackgroundColor(variant as keyof typeof BUTTON_COLOR_TOKENS , 'default', colorTheme),
+    [variant, colorTheme]
+  );
+
+  const hoverBgColor = useMemo(
+    () => getBackgroundColor(variant as keyof typeof BUTTON_COLOR_TOKENS, 'hover', colorTheme),
+    [variant, colorTheme]
+  );
+
+  const pressedBgColor = useMemo(
+    () => getBackgroundColor(variant as keyof typeof BUTTON_COLOR_TOKENS, 'pressed', colorTheme),
+    [variant, colorTheme]
   );
 
   const borderColor = useMemo(
-    () =>
-      getBorderColor(variant as keyof typeof BUTTON_COLOR_TOKENS, colorTheme),
-    [variant]
-  );
-
-  const pressedBackgroundColor = useMemo(
-    () =>
-      getBackgroundColor(
-        variant as keyof typeof BUTTON_COLOR_TOKENS,
-        'pressed',
-        colorTheme
-      ),
-    [variant]
+    () => getBorderColor(variant as keyof typeof BUTTON_COLOR_TOKENS, colorTheme),
+    [variant, colorTheme]
   );
 
   const textColor = useMemo(
     () => getTextColor(variant as keyof typeof BUTTON_COLOR_TOKENS, colorTheme),
-    [variant]
+    [variant, colorTheme]
   );
 
   const opacity = useMemo(() => (disabled ? 0.3 : 1), [disabled]);
@@ -119,7 +113,7 @@ const Button: React.FC<ButtonProps> = ({
       size: scaleFont(theme.buttonIconStyles[responsiveSize as SizeType].size),
       color: textColor,
     }),
-    [responsiveSize, textColor]
+    [responsiveSize, textColor, theme.buttonIconStyles]
   );
 
   const applyIconStyle = useCallback(
@@ -130,62 +124,71 @@ const Button: React.FC<ButtonProps> = ({
     [iconStyleMemo]
   );
 
-  const styles = useMemo(
+
+  const combinedButtonStyle = useMemo(
     () =>
-      StyleSheet.create({
-        combinedButtonStyle: {
-          ...stylesLocal.baseButton,
-          ...buttonTheme,
-          backgroundColor,
+      StyleSheet.flatten([
+        styles.baseButton,
+        buttonTheme,
+        {
+          backgroundColor: isHovered ? hoverBgColor : defaultBgColor,
           borderColor,
           opacity,
-          ...buttonStyle,
         },
-        pressedButtonStyle: {
-          backgroundColor: pressedBackgroundColor,
-        },
-        combinedTextStyle: {
-          ...stylesLocal.baseText,
-          ...textTheme,
-          fontSize: scaleFont(Number(textTheme.fontSize)),
-          color: textColor,
-          ...textStyle,
-        } as TextStyle,
-      }),
+        buttonStyle,
+      ]),
     [
+      styles.baseButton,
       buttonTheme,
-      backgroundColor,
+      isHovered,
+      hoverBgColor,
+      defaultBgColor,
       borderColor,
       opacity,
       buttonStyle,
-      pressedBackgroundColor,
-      textTheme,
-      textColor,
-      textStyle,
     ]
+  );
+
+  const pressedButtonStyle = useMemo(
+    () =>
+      StyleSheet.flatten([
+        combinedButtonStyle,
+        { backgroundColor: pressedBgColor },
+      ]),
+    [combinedButtonStyle, pressedBgColor]
+  );
+
+  const combinedTextStyle = useMemo(
+    () =>
+      StyleSheet.flatten([
+        styles.baseText,
+        textTheme,
+        { color: textColor, fontSize: scaleFont(textTheme.fontSize) },
+        textStyle,
+      ]) as TextStyle,
+    [styles.baseText, textTheme, textColor, textStyle]
   );
 
   return (
     <Pressable
       onPress={onPress}
       disabled={disabled}
-      style={({ pressed }) => [
-        styles.combinedButtonStyle,
-        pressed && styles.pressedButtonStyle,
-      ]}
+      style={({ pressed }) =>
+        pressed ? pressedButtonStyle : combinedButtonStyle
+      }
       {...(isWeb && {
         onMouseEnter: () => setIsHovered(true),
         onMouseLeave: () => setIsHovered(false),
       })}
     >
       {showPrefixIcon && prefixIcon && applyIconStyle(prefixIcon)}
-      <Text style={styles.combinedTextStyle}>{children}</Text>
+      <Text style={combinedTextStyle}>{children}</Text>
       {showSuffixIcon && suffixIcon && applyIconStyle(suffixIcon)}
     </Pressable>
   );
 };
 
-const stylesLocal = StyleSheet.create({
+const styles = StyleSheet.create({
   baseButton: {
     alignItems: 'center',
     justifyContent: 'center',
