@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Button } from 'react-native-saj-test';
 
 const HomePage = () => {
   const navigation =
@@ -35,6 +36,7 @@ const HomePage = () => {
       >
         <Text style={styles.text}>Button</Text>
       </TouchableOpacity>
+      <Button size={'large'} variant={'primary'}>sajid</Button>
     </View>
   );
 };

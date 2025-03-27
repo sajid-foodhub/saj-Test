@@ -1,9 +1,6 @@
-import {
-  SliceThemeProvider,
-  Typography,
-  useDeviceBreakpoint,
-} from 'react-native-saj-test';
-import { StyleSheet, ScrollView, SafeAreaView } from 'react-native';
+import React from 'react';
+import { Button, Typography, useDeviceBreakpoint } from 'react-native-saj-test';
+import { StyleSheet, ScrollView, SafeAreaView, View } from 'react-native';
 import { useFonts } from 'expo-font';
 import { TYPOGRAPHY_STYLES } from '../../src/SliceUI/typography/Token';
 
@@ -18,13 +15,13 @@ export const AllTypographyVariants = () => (
 );
 
 export const responsiveFont = {
-  xs: 'body2Regular', // small mobile
-  sm: 'body1Medium', // mobile
-  md: 'heading4Bold', // tablet
-  lg: 'heading2Bold', // small desktop
-  xl: 'display3Bold', // large desktop
-  xxl: 'display2Bold', // large screens / TV
-  default: 'body1Regular', // fallback
+  xs: 'body2Regular',
+  sm: 'body1Medium',
+  md: 'heading4Bold',
+  lg: 'heading2Bold',
+  xl: 'display3Bold',
+  xxl: 'display2Bold',
+  default: 'body1Regular',
 };
 
 export default function Typo() {
@@ -42,20 +39,37 @@ export default function Typo() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <SliceThemeProvider>
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          <Typography variant="heading5Black">
-            {'ALL Typography variants'}
-          </Typography>
-          <AllTypographyVariants />
-          <Typography variant="heading5Black">
-            {'Responsive Typography'}
-          </Typography>
-          <Typography variant={responsiveFont[breakPoint] || responsiveFont.default}>
-            {`Break Point: ${breakPoint} | Font: ${responsiveFont[breakPoint]}`}
-          </Typography>
-        </ScrollView>
-      </SliceThemeProvider>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Typography variant="heading5Black">
+          {'ALL Typography variants'}
+        </Typography>
+        <AllTypographyVariants />
+
+        <Typography variant="heading5Black">
+          {'Responsive Typography'}
+        </Typography>
+        <Typography
+          variant={responsiveFont[breakPoint] || responsiveFont.default}
+        >
+          {`Break Point: ${breakPoint} | Font: ${responsiveFont[breakPoint]}`}
+        </Typography>
+
+        <Typography variant="heading5Black">{'Buttons 1 - 100'}</Typography>
+
+        <View style={styles.buttonContainer}>
+          {[...Array(1)].map((_, index) => (
+            <Button
+              id={index + 1}
+              key={index + 1}
+              size={'large'}
+              variant={'primary'}
+              buttonStyle={{ margin: 10 }}
+            >
+              Button
+            </Button>
+          ))}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -67,5 +81,11 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: 32,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginBottom: 50,
   },
 });

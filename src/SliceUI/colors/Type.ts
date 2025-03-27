@@ -1,15 +1,22 @@
 import type { Theme } from '@react-navigation/native';
 
 export interface ColorTokens {
-  colorAccentPrimary: string;
-  colorActionSuccess: string;
-  colorActionNegative: string;
+  colorBackgroundAccent: string;
+  colorBackgroundPositive: string;
+  colorBackgroundNegative: string;
+  colorBackgroundLink: string;
   colorBackgroundPrimary: string;
   colorBackgroundSecondary: string;
   colorBackgroundTertiary: string;
   colorBackgroundLight: string;
+  colorBackgroundLighter: string;
   colorBackgroundElevated: string;
   colorBackgroundModal: string;
+
+  colorBorderAccent: string;
+  colorBorderPositive: string;
+  colorBorderNegative: string;
+  colorBorderLink: string;
   colorBorderStrong: string;
   colorBorderMedium: string;
   colorBorderSubtle: string;
@@ -17,27 +24,27 @@ export interface ColorTokens {
   colorBorderLighter: string;
   colorBorderAlpha: string;
 
-  colorContrastWhite: string;
-  colorContrastBlack: string;
-
+  colorForegroundAccent: string;
+  colorForegroundPositive: string;
+  colorForegroundNegative: string;
+  colorForegroundLink: string;
   colorForegroundPrimary: string;
   colorForegroundSecondary: string;
   colorForegroundTertiary: string;
   colorForegroundLight: string;
-  colorForegroundLink: string;
+  colorForegroundLighter: string;
+  colorForegroundInvariable: string;
+
   colorStatePrimaryDisabled: string;
   colorStatePrimaryHover: string;
   colorStatePrimaryPressed: string;
-  colorStateAccentCODisabled: string;
-  colorStateAccentCOHover1: string;
-  colorStateAccentCOHover2: string;
-  colorStateAccentCOPressed1: string;
-  colorStateAccentCOPressed2: string;
-}
 
-export interface ThemeColorTokens {
-  light: ColorTokens;
-  dark: ColorTokens;
+  colorStateAccentDisabled: string;
+  colorStateAccentHover1: string;
+  colorStateAccentHover2: string;
+  colorStateAccentPressed1: string;
+  colorStateAccentPressed2: string;
+  colorStateContrastWhiteDisabled: string;
 }
 
 export type ExtendedTheme = Theme & {

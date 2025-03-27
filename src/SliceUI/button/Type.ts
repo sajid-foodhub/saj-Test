@@ -34,3 +34,6 @@ export type ButtonIconSizeType = {
 export type ButtonState = 'default' | 'pressed' | 'hover' | 'disabled';
 
 
+export type ButtonVariant = 'primary' | 'primaryOutline' | 'outlined';
+
+
