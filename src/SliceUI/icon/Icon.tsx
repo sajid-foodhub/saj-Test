@@ -4,6 +4,7 @@ import { resolveVariant, scaleFont } from '../responsive/helper';
 import { ICON_SIZES } from './Token';
 import type { VariantBreakPoints } from '../responsive/Type';
 import { useDeviceBreakpoint } from '../responsive/useDeviceBreakPoint';
+import { useSliceTheme } from '../contextProvider/context';
 
 interface IconProps {
   component: any; // Ensure this is a valid React element
@@ -12,15 +13,17 @@ interface IconProps {
 }
 
 const Icon: React.FC<IconProps> = ({ component, variant, color }) => {
+  const { theme } = useSliceTheme();
+  const { iconSizes } = theme;
   const breakpoint = useDeviceBreakpoint();
   const breakPointVariant = resolveVariant(
     variant,
     breakpoint
-  ) as keyof typeof ICON_SIZES;
+  ) as keyof typeof iconSizes;
   const applyIconStyle = (icon: any) =>
     React.cloneElement(icon, {
-      ...ICON_SIZES[breakPointVariant],
-      size: scaleFont(ICON_SIZES[breakPointVariant].size),
+      ...iconSizes[breakPointVariant],
+      size: scaleFont(iconSizes[breakPointVariant].size),
       color: color,
     });
 

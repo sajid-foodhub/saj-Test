@@ -82,22 +82,38 @@ const Button: React.FC<ButtonProps> = ({
   );
 
   const defaultBgColor = useMemo(
-    () => getBackgroundColor(variant as keyof typeof BUTTON_COLOR_TOKENS , 'default', colorTheme),
+    () =>
+      getBackgroundColor(
+        variant as keyof typeof BUTTON_COLOR_TOKENS,
+        'default',
+        colorTheme
+      ),
     [variant, colorTheme]
   );
 
   const hoverBgColor = useMemo(
-    () => getBackgroundColor(variant as keyof typeof BUTTON_COLOR_TOKENS, 'hover', colorTheme),
+    () =>
+      getBackgroundColor(
+        variant as keyof typeof BUTTON_COLOR_TOKENS,
+        'hover',
+        colorTheme
+      ),
     [variant, colorTheme]
   );
 
   const pressedBgColor = useMemo(
-    () => getBackgroundColor(variant as keyof typeof BUTTON_COLOR_TOKENS, 'pressed', colorTheme),
+    () =>
+      getBackgroundColor(
+        variant as keyof typeof BUTTON_COLOR_TOKENS,
+        'pressed',
+        colorTheme
+      ),
     [variant, colorTheme]
   );
 
   const borderColor = useMemo(
-    () => getBorderColor(variant as keyof typeof BUTTON_COLOR_TOKENS, colorTheme),
+    () =>
+      getBorderColor(variant as keyof typeof BUTTON_COLOR_TOKENS, colorTheme),
     [variant, colorTheme]
   );
 
@@ -123,7 +139,6 @@ const Button: React.FC<ButtonProps> = ({
         : null,
     [iconStyleMemo]
   );
-
 
   const combinedButtonStyle = useMemo(
     () =>
