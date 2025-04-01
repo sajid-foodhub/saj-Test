@@ -5,9 +5,10 @@ export const VIEW_DISABLED = '_Disabled';
 export const VIEW_SELECTED = '_Selected';
 
 export const setTestId = (
+  baseId: string,
   screenName: string | null | undefined,
   id: string | null | undefined,
-  className: string | null | undefined
+  className: string | null | undefined = null,
 ) => {
   try {
     return Platform.OS === 'android'
@@ -16,7 +17,7 @@ export const setTestId = (
           accessibilityLabel: BASE_ID + screenName + '_' + id,
         }
       : {
-          testID: BASE_ID + screenName + '_' + id,
+          testID: baseId + screenName + '_' + id,
           ...(className
             ? { dataSet: { class: className } }
             : { dataSet: { class: id } }),

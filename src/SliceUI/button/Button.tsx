@@ -14,9 +14,11 @@ import { useDeviceBreakpoint } from '../responsive/useDeviceBreakPoint';
 import { resolveVariant, scaleFont } from '../responsive/helper';
 import type { SizeType } from './Type';
 import type { BUTTON_COLOR_TOKENS } from './Token';
+import { setTestId } from '../automation/helper';
 
 interface ButtonProps {
-  id?: number;
+  screenName?: string;
+  id?: number | string;
   children: string | string[];
   onPress?: () => void;
   overridedTheme?: any;
@@ -45,6 +47,8 @@ export type ButtonVariantType =
 const isWeb = Platform.OS === 'web';
 
 const Button: React.FC<ButtonProps> = ({
+  screenName = 'default',
+  id = 'default',
   children,
   onPress,
   variant = BUTTON_VARIANTS.PRIMARY,
@@ -60,6 +64,7 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const colorTheme = useTheme();
   const { theme } = useSliceTheme();
+  const { isDebugBuildType, automationBaseid } = theme;
   const [isHovered, setIsHovered] = useState(false);
 
   const breakpoint = useDeviceBreakpoint();
@@ -195,6 +200,7 @@ const Button: React.FC<ButtonProps> = ({
         onMouseEnter: () => setIsHovered(true),
         onMouseLeave: () => setIsHovered(false),
       })}
+      {...(isDebugBuildType ? setTestId(automationBaseid, screenName, id) : {})}
     >
       {showPrefixIcon && prefixIcon && applyIconStyle(prefixIcon)}
       <Text style={combinedTextStyle}>{children}</Text>
