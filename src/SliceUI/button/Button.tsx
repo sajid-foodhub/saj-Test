@@ -12,7 +12,7 @@ import { useTheme } from '@react-navigation/native';
 import { getBackgroundColor, getBorderColor, getTextColor } from './helper';
 import { useDeviceBreakpoint } from '../responsive/useDeviceBreakPoint';
 import { resolveVariant, scaleFont } from '../responsive/helper';
-import type { SizeType } from './Type';
+import type { SizeType, VariantsType } from './Type';
 import type { BUTTON_COLOR_TOKENS } from './Token';
 import { setTestId } from '../automation/helper';
 
@@ -73,13 +73,15 @@ const Button: React.FC<ButtonProps> = ({
     [size, breakpoint]
   );
 
-  const buttonTheme = useMemo(
-    () =>
-      theme.buttonStyles[responsiveSize as SizeType][
-        rounded ? 'solidRounded' : 'solid'
-      ],
-    [responsiveSize, rounded, theme.buttonStyles]
-  );
+  const buttonTheme = useMemo(() => {
+    const buttonType =
+      variant === BUTTON_VARIANTS.PRIMARY ? 'solid' : 'outline';
+    const styleKey = rounded ? `${buttonType}Rounded` : buttonType;
+
+    return theme.buttonStyles[responsiveSize as SizeType][
+      styleKey as VariantsType
+    ];
+  }, [variant, responsiveSize, rounded, theme]);
 
   const textTheme = useMemo(
     () => theme.buttonTextStyles[responsiveSize as SizeType],
